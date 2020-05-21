@@ -3,8 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:WpfDesignData.Samples.ViewModels"
              xmlns:view="clr-namespace:WpfDesignData.Samples.Views"
+             xmlns:dd="clr-namespace:WpfDesignData;assembly=WpfDesignData"
+             xmlns:dynamic="clr-namespace:System.Dynamic;assembly=System.Core"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <DataTemplate DataType="{x:Type dynamic:ExpandoObject}">
+            <ContentControl Content="{Binding .}">
+                <ContentControl.ContentTemplateSelector>
+                    <dd:DesignTemplateSelector />
+                </ContentControl.ContentTemplateSelector>
+            </ContentControl>
+        </DataTemplate>
+        
         <DataTemplate DataType="{x:Type vm:BusinessCardVM}">
             <view:BusinessCardView />
         </DataTemplate>

@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Xml.Serialization;
@@ -120,9 +121,47 @@ namespace WpfDesignData
         public object Value { get; set; }
     }
 
+    public class DesignDataTypeMapper : MarkupExtension
+    {
+        public override object ProvideValue(IServiceProvider serviceProvider)
+        {
+            var contentControl = new FrameworkElementFactory(typeof(ContentControl));
+            contentControl.SetBinding(ContentControl.ContentProperty, new Binding() { Path = new PropertyPath(".") });
+            contentControl.SetValue(ContentControl.ContentTemplateSelectorProperty, new DesignTemplateSelector());
+
+            return new DataTemplate(typeof(ExpandoObject))
+            {
+                VisualTree = contentControl
+            };
+        }
+    }
+
+    [DictionaryKeyProperty("DataTemplateKey")]
     public class DesignDataTemplate : DataTemplate
     {
+        /*
+        <DataTemplate DataType="{x:Type dynamic:ExpandoObject}">
+            <ContentControl Content="{Binding .}">
+                <ContentControl.ContentTemplateSelector>
+                    <dd:DesignTemplateSelector />
+                </ContentControl.ContentTemplateSelector>
+            </ContentControl>
+        </DataTemplate>*/
 
+        public DesignDataTemplate()
+            : base(typeof(ExpandoObject))
+        {
+            var contentControl = new FrameworkElementFactory(typeof(ContentControl));
+            contentControl.SetBinding(ContentControl.ContentProperty, new Binding() { Path = new PropertyPath(".") });
+            contentControl.SetValue(ContentControl.ContentTemplateSelectorProperty, new DesignTemplateSelector());
+
+            VisualTree = contentControl;
+        }
+
+        protected override void ValidateTemplatedParent(FrameworkElement templatedParent)
+        {
+            base.ValidateTemplatedParent(templatedParent);
+        }
     }
 
 
@@ -132,13 +171,40 @@ namespace WpfDesignData
         {
             FrameworkElement element = container as FrameworkElement;
 
-            if (item is ExpandoObject obj && obj is IDictionary<string, object> dict && dict.TryGetValue("MasqueradeAsType", out var type))
+            if (item is ExpandoObject obj)
             {
-                return element.TryFindResource(new DataTemplateKey(type)) as DataTemplate;
+                var dict = (IDictionary<string, object>)obj;
+                if (dict.TryGetValue("MasqueradeAsType", out var type) && type != null)
+                {
+                    return element.TryFindResource(new DataTemplateKey(type)) as DataTemplate;
+                }
+                else
+                {
+                    var sb = new StringBuilder();
+
+                    foreach (var kvp in dict)
+                    {
+                        sb.AppendLine($"{kvp.Key}: {kvp.Value}");
+                    }
+
+                    var contentControl = new FrameworkElementFactory(typeof(TextBlock));
+                    contentControl.SetValue(TextBlock.TextProperty, sb.ToString());
+
+                    return new DataTemplate()
+                    {
+                        VisualTree = contentControl
+                    };
+                }
             }
             else
             {
-                return base.SelectTemplate(item, container);
+                var contentControl = new FrameworkElementFactory(typeof(TextBlock));
+                contentControl.SetValue(TextBlock.TextProperty, "<unknown>");
+
+                return new DataTemplate()
+                {
+                    VisualTree = contentControl
+                };
             }
         }
     }
