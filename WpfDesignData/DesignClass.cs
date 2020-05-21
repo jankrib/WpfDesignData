@@ -139,15 +139,6 @@ namespace WpfDesignData
     [DictionaryKeyProperty("DataTemplateKey")]
     public class DesignDataTemplate : DataTemplate
     {
-        /*
-        <DataTemplate DataType="{x:Type dynamic:ExpandoObject}">
-            <ContentControl Content="{Binding .}">
-                <ContentControl.ContentTemplateSelector>
-                    <dd:DesignTemplateSelector />
-                </ContentControl.ContentTemplateSelector>
-            </ContentControl>
-        </DataTemplate>*/
-
         public DesignDataTemplate()
             : base(typeof(ExpandoObject))
         {

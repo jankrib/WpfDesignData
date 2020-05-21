@@ -7,16 +7,18 @@
              xmlns:dynamic="clr-namespace:System.Dynamic;assembly=System.Core"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <DataTemplate DataType="{x:Type dynamic:ExpandoObject}">
+        <!--<DataTemplate DataType="{x:Type dynamic:ExpandoObject}">
             <ContentControl Content="{Binding .}">
                 <ContentControl.ContentTemplateSelector>
                     <dd:DesignTemplateSelector />
                 </ContentControl.ContentTemplateSelector>
             </ContentControl>
-        </DataTemplate>
-        
+        </DataTemplate>-->
+        <dd:DesignDataTemplate DataType="{x:Type dynamic:ExpandoObject}" />
+
         <DataTemplate DataType="{x:Type vm:BusinessCardVM}">
             <view:BusinessCardView />
         </DataTemplate>
+        
     </Application.Resources>
 </Application>
