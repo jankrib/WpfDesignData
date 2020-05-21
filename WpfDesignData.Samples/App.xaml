@@ -1,0 +1,12 @@
+﻿<Application x:Class="WpfDesignData.Samples.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="clr-namespace:WpfDesignData.Samples.ViewModels"
+             xmlns:view="clr-namespace:WpfDesignData.Samples.Views"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <DataTemplate DataType="{x:Type vm:BusinessCardVM}">
+            <view:BusinessCardView />
+        </DataTemplate>
+    </Application.Resources>
+</Application>

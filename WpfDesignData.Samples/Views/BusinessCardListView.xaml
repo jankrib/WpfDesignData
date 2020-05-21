@@ -1,0 +1,57 @@
+﻿<UserControl x:Class="WpfDesignData.Samples.Views.BusinessCardListView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfDesignData.Samples.Views"
+             mc:Ignorable="d" 
+             xmlns:vm="clr-namespace:WpfDesignData.Samples.ViewModels"
+             xmlns:view="clr-namespace:WpfDesignData.Samples.Views"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
+             xmlns:dd="clr-namespace:WpfDesignData;assembly=WpfDesignData" xmlns:dynamic="clr-namespace:System.Dynamic;assembly=System.Core"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <d:DesignerProperties.DesignStyle>
+        <Style TargetType="UserControl">
+            <Setter Property="Background" Value="White" />
+        </Style>
+    </d:DesignerProperties.DesignStyle>
+    <d:DesignerProperties.DataContext>
+        <dd:DesignClass>
+            <dd:DesignCollection x:Key="Cards">
+                <dd:DesignClass TargetType="{x:Type vm:BusinessCardVM}">
+                    <s:String x:Key="Name">Jom Tones</s:String>
+                    <s:String x:Key="Title">Singer</s:String>
+                    <s:String x:Key="Phonenumber">1 (313) 555-1234</s:String>
+                </dd:DesignClass>
+                <dd:DesignClass TargetType="{x:Type vm:BusinessCardVM}">
+                    <s:String x:Key="Name">Prad Bitt</s:String>
+                    <s:String x:Key="Title">Actor</s:String>
+                    <s:String x:Key="Phonenumber">1 (313) 555-1234</s:String>
+                </dd:DesignClass>
+                <dd:DesignClass TargetType="{x:Type vm:BusinessCardVM}">
+                    <s:String x:Key="Name">Polly Darton</s:String>
+                    <s:String x:Key="Title">Singer</s:String>
+                    <s:String x:Key="Phonenumber">1 (313) 555-1234</s:String>
+                </dd:DesignClass>
+            </dd:DesignCollection>
+        </dd:DesignClass>
+    </d:DesignerProperties.DataContext>
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type dynamic:ExpandoObject}">
+            <ContentControl Content="{Binding .}">
+                <ContentControl.ContentTemplateSelector>
+                    <dd:DesignTemplateSelector />
+                </ContentControl.ContentTemplateSelector>
+            </ContentControl>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <ScrollViewer Background="Gray">
+            <ItemsControl ItemsSource="{Binding Cards}" />
+        </ScrollViewer>
+    </Grid>
+</UserControl>
